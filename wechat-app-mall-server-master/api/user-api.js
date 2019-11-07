@@ -429,15 +429,15 @@ var RongSDK = require('rongcloud-sdk')({
 var rongUser = RongSDK.User;
 
 
-exports.sign=(req,res) => {
+exports.sign=(req,response) => {
     const {deviceUUID,name} = req.body ;
-    // console.log(mobile,pwd);
+    console.log(deviceUUID,name);
     // 
-    if(deviceUUID& name){
+    if(deviceUUID.length > 0 && name.length > 0){
         User.find({},(err,res)=>{
             console.log("User.find",err,res);
             if(res.length>=100){
-                res.json({
+                response.json({
                     code: 300,
                     message: '添加失败，人数超过了',
                     
@@ -447,8 +447,8 @@ exports.sign=(req,res) => {
 //是否注册过融云
 User.find({openid:deviceUUID},(err,res)=>{
     console.log("User.find.openid:deviceUUID",err,res);
-    if(res.length>=100){
-        res.json({
+    if(res.length>=1){
+        response.json({
             code: 200,
             message: '注册过了',
             
@@ -469,13 +469,14 @@ User.find({openid:deviceUUID},(err,res)=>{
             }
             ).then(result => {
     
-                res.json({
+                response.json({
                     code: 200,
                     message: '添加成功',
                     data: result
                 })
+                
             }) .catch(err => {
-                res.json({
+                response.json({
                     code: -200,
                     message: err.toString()
                 })

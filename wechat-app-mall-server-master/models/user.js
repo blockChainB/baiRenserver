@@ -10,9 +10,9 @@ var UserSchema = new Schema({
     address:Object,     //地址
     coupon:Array,        //优惠券
     pwd:String,
-    name:name,            //姓名  
-    portrait:portrait,    //头像
-    deviceUUID:deviceUUID
+    name:String,            //姓名  
+    portrait:String,    //头像
+    deviceUUID:String
 })
 
 var User = mongoose.model('User', UserSchema)
