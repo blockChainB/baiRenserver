@@ -12,7 +12,8 @@ var UserSchema = new Schema({
     pwd:String,
     name:String,            //姓名  
     portrait:String,    //头像
-    deviceUUID:String
+    deviceUUID:String,
+    token:String
 })
 
 var User = mongoose.model('User', UserSchema)

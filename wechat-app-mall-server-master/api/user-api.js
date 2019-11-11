@@ -414,7 +414,7 @@ exports.couponList = (req,res) => {
 
 
 
-   //百人圈
+//百人圈
 //自己的 Appkey
 var appkey = '82hegw5u8xulx';
 // 替换成您自己的 Secret
@@ -451,40 +451,54 @@ User.find({openid:deviceUUID},(err,res)=>{
         response.json({
             code: 200,
             message: '注册过了',
-            
+            data:res[0]
         })
     }else{
+        var portrait=  'http://7xogjk.com1.z0.glb.clouddn.com/IuDkFprSQ1493563384017406982'
         var user = {
             id: deviceUUID,
             name: name,
-            portrait: 'http://7xogjk.com1.z0.glb.clouddn.com/IuDkFprSQ1493563384017406982'
+            portrait: portrait
         };
         rongUser.register(user).then(result => {
             console.log(result);
-            User.createAsync({
-                openid:deviceUUID,
-                creat_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-                update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-                name: name
+
+            if(result.code == 200){
+                var token = result.token  
+
+                User.createAsync({
+                    openid:deviceUUID,
+                    creat_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    name: name,
+                    portrait:portrait ,
+                    token:token
+                }
+                ).then(result => {
+        
+                    response.json({
+                        code: 200,
+                        message: '添加成功',
+                        data: result
+                    })
+                    
+                }) .catch(err => {
+                    response.json({
+                        code: -200,
+                        message: err.toString()
+                    })
+                })
+
             }
-            ).then(result => {
-    
-                response.json({
-                    code: 200,
-                    message: '添加成功',
-                    data: result
-                })
-                
-            }) .catch(err => {
-                response.json({
-                    code: -200,
-                    message: err.toString()
-                })
-            })
+           
+           
 
 
         }, error => {
-            console.log(error);
+            response.json({
+                code: -200,
+                message: error.toString()
+            })
         });
         
     }
